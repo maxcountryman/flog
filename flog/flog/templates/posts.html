@@ -1,0 +1,14 @@
+{% from 'macros.html' import render_pagination, render_post %}
+
+{% extends "layout.html" %}
+{% block title %} | Posts{% endblock %}
+
+{% block body %}
+
+{% for post in pagination.items %}
+{{ render_post(post) }}
+{% endfor %}
+
+{{ render_pagination(pagination) }}
+
+{% endblock %}

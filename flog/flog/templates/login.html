@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Sign In{% endblock %}
+{% block body %}
+{% from "macros.html" import render_field %}
+<h2>Sign In</h2>
+<form method="post" action="">
+    <dl>
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
+    </dl>
+    <input type="submit" class="button" value="Login">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+</form>
+{% endblock %}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+    <title>{{ config.SITE_NAME }} {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href='http://fonts.googleapis.com/css?family=Nunito&v2' rel='stylesheet' type='text/css'>
+    <script>
+        $(".flash").ready(function () {
+            $(".flash").delay(2500).fadeOut(450);
+        });
+    </script>
+    {% block extra_script %}{% endblock %}
+    <div class="wrapper">
+        <div id="header" class="header">
+            <h1><a href="/">{{ config.SITE_NAME }}</a></h1>
+        </div>
+        {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div> 
+        {% endfor %}
+        {% if error %}
+        <div class="error"><strong>Error:</strong> {{ error }}</div>
+        {% endif %}
+        <div id="page" class="page">
+            {% block body %}{% endblock %}
+        </div>
+        <div id="footer" class="footer">
+        </div>
+    </div>
+</html>

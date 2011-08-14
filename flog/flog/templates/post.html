@@ -1,0 +1,10 @@
+{% from 'macros.html' import render_post %}
+
+{% extends "layout.html" %}
+{% block title %} | {{ post.title }}{% endblock %}
+
+{% block body %}
+
+{{ render_post(post, tags) }}
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% macro render_post(post, tags=None) %}
+<div class="post">
+    <h1>
+        <a href="{{ url_for('show_post', slug=post.slug) }}">{{ post.title }}</a>
+    </h1>
+    <div class="meta">
+        <span class="author" title="{{ post.author }}">
+            <strong>{{ post.author }}</strong>
+        </span>
+        <span class="date" title="{{ post.pub_date }}">
+            {{ post.pub_date|formatdate('%B %d, %Y') }}
+        </span>
+        {% if tags %}
+        {% for tag in tags %}
+        <span class="tags">
+            <a href="{{ url_for('show_tag', tag=tag.name)}}">#{{ tag.name }}</a>
+        </span>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="body">
+        {{ post.body|safe }}
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro render_pagination(pagination) %}
+<div class="pagination">
+    {%- for page in pagination.iter_pages() %}
+    {% if page %}
+    {% if page != pagination.page %}
+    <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
+    {% else %}
+    <strong>{{ page }}</strong>
+    {% endif %}
+    {% else %}
+    <span class="ellipsis">…</span>
+    {% endif %}
+    {%- endfor %}
+    {% if pagination.has_next %}
+    <a href="{{ url_for_other_page(pagination.page + 1)}}">Next &raquo;</a>
+    {% endif %}
+</div>
+{% endmacro %}
+
+
+{% macro render_field(field) %}
+{{ field.label }}
+<dd>
+{{ field(**kwargs)|safe }}
+{% if field.errors %}
+{% for error in field.errors %}
+<li class="field-error">{{ error }}</li>
+{% endfor %}
+{% endif %}
+</dd>
+{% endmacro %}

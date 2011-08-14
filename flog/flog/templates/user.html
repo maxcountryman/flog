@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block body %}
+{% if not session['username'] == user.username and not username %}
+<h2>{{ user.username }}'s Profile</h2>
+{% if error %}<div class=error><strong>Error:</strong> {{ error }}</div>{% endif %}
+<div class=profile>
+</div>
+{% elif session.logged_in and session['username'] == user.username %}
+{% if error %}<div class=error><strong>Error:</strong> {{ error }}</div>{% endif %}
+<div class=grid_2>
+    <p></p>
+</div>
+<div class=grid_4>
+    <h2>Account Settings</h2>
+    <p><small>Your current password is required to make changes</small></p>
+</div>
+
+<div class=grid_4>
+    {% from "_formhelpers.html" import render_field %}
+    <form method="post" action="">
+        <dl>
+            {{ render_field(form.email) }}
+            {{ render_field(form.current) }}
+            {{ render_field(form.newpass) }}
+            {{ render_field(form.confirm) }}
+        </dl>
+        <p><input class=button type=submit value=Update></input></p>
+        <input type=hidden name=_csrf_token value="{{ csrf_token() }}">
+    </form>
+    <small><a class=delete-account href="{{ url_for('user', username=session.username) }}?delete">Delete Account</a></small>
+</div>
+<div class=grid_2></div>
+<div class=clear></div>
+{% else %}
+<h2>User '{{ username }}' Not Found</h2>
+{% if error %}<div class=error><strong>Error:</strong> {{ error }}</div>{% endif %}
+{% endif %}
+
+<script>
+    $(document).ready(function() {
+        $('a.delete-account').confirm({
+            timeout:7000,
+            dialogShow:'fadeIn',
+            dialogSpeed:'slow',
+            buttons: {
+                wrapper:'<button></button>',
+                separator:'  '
+            }  
+        });
+    });
+</script>
+
+{% endblock %}
+

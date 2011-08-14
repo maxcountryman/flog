@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %} | Add a new post{% endblock %}
+
+{% block body %}
+{% from "macros.html" import render_field %}
+<form method="post" action="/post">
+    <dl>
+        {{ render_field(form.title) }}
+        {{ render_field(form.body) }}
+        {{ render_field(form.tags) }}
+    </dl>
+    <input class="button" type="submit" value="Post"></input>
+    <input type=hidden name=_csrf_token value="{{ csrf_token() }}">
+</form>
+{% endblock %}
+
