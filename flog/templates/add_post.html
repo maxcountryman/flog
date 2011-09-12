@@ -1,16 +1,18 @@
 {% extends "layout.html" %}
-{% block title %} | Add a new post{% endblock %}
+{% block title %}Add a new post | {% endblock %}
 
 {% block body %}
-{% from "macros.html" import render_field %}
-<form method="post" action="/post">
-    <dl>
-        {{ render_field(form.title) }}
-        {{ render_field(form.body) }}
-        {{ render_field(form.tags) }}
-    </dl>
-    <input class="button" type="submit" value="Post"></input>
-    <input type=hidden name=_csrf_token value="{{ csrf_token() }}">
-</form>
+{% from "macros.html" import with_errors %}
+<div class="grid">
+    <div class="span16">
+        <div class="add-post form-style">
+            <form method="post" action="">
+                {{ with_errors(form.title, class='text-input') }}
+                {{ with_errors(form.body, class='text-input', rows='20', cols='100%') }}
+                {{ with_errors(form.tags, class='text-input') }}
+                <input type="submit" value="Add Post">
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
-

@@ -1,16 +1,24 @@
 {% extends "layout.html" %}
-{% block title %}Sign Up{% endblock %}
-{% block body %}
-{% from "macros.html" import render_field %}
-<h2>Sign Up</h2>
-<form method="post" action="/register">
-    <dl>
-        {{ render_field(form.username) }}
-        {{ render_field(form.email) }}
-        {{ render_field(form.password) }}
-        {{ render_field(form.confirm) }}
-    </dl>
-    <input type="submit" class="button" value="Register"></input>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-</form>
+{% block title %}Sign Up | {% endblock %}
+{% block header %}
 {% endblock %}
+{% block content %}
+{% endblock %}
+{% block other %}
+<div class="sign-up form-style">
+    <h1>{{ config.SITE_NAME }}</h1>
+    {% from "macros.html" import with_errors %}
+    <form method="post" action="">
+        <h2>Sign Up</h2>
+        {{ with_errors(form.username, class='text-input', placeholder='foobar', spellcheck='false') }}
+        {{ with_errors(form.email, class='text-input', placeholder='email@example.com') }}
+        {{ with_errors(form.pass_one, class='text-input') }}
+        {{ with_errors(form.pass_two, class='text-input') }}
+        <input class="submit-button" type="submit" value="Register">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    </form>
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}
+

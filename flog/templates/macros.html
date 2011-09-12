@@ -1,18 +1,21 @@
 {% macro render_post(post, tags=None) %}
-<div class="post">
+<article class="post">
     <h1>
         <a href="{{ url_for('show_post', slug=post.slug) }}">{{ post.title }}</a>
     </h1>
     <div class="meta">
-        <span class="author" title="{{ post.author }}">
+        <span class="author" title="Posted by {{post.author}}">
             <strong>{{ post.author }}</strong>
         </span>
-        <span class="date" title="{{ post.pub_date }}">
+        <span class="date" title="Posted on {{post.pub_date}}">
             {{ post.pub_date|formatdate('%B %d, %Y') }}
+        </span>
+        <span class="permalink" title="Permalink to {{post.title}}">
+            <a href="{{ url_for('show_post', slug=post.slug) }}">Permalink</a>
         </span>
         {% if tags %}
         {% for tag in tags %}
-        <span class="tags">
+        <span class="tags" title="Tagged as {{tag.name}}">
             <a href="{{ url_for('show_tag', tag=tag.name)}}">#{{ tag.name }}</a>
         </span>
         {% endfor %}
@@ -21,38 +24,68 @@
     <div class="body">
         {{ post.body|safe }}
     </div>
+</article>
+{% endmacro %}
+
+
+{% macro render_post_list(post, tags) %}
+<div class="post">
+    <h1>
+        <a href="{{ url_for('show_post', slug=post.slug) }}">{{ post.title }}</a>
+    </h1>
+    <div class="meta">
+        <span class="date" title="{{post.pub_date}}">
+            {{ post.pub_date|formatdate('%B %d, %Y') }}
+        </span>
+    </div>
+    <div class="body">
+        {{ post.body|truncate|safe|striptags }}
+    </div>
 </div>
 {% endmacro %}
 
 
 {% macro render_pagination(pagination) %}
 <div class="pagination">
-    {%- for page in pagination.iter_pages() %}
-    {% if page %}
-    {% if page != pagination.page %}
-    <a href="{{ url_for_other_page(page) }}">{{ page }}</a>
-    {% else %}
-    <strong>{{ page }}</strong>
-    {% endif %}
-    {% else %}
-    <span class="ellipsis">…</span>
-    {% endif %}
-    {%- endfor %}
-    {% if pagination.has_next %}
-    <a href="{{ url_for_other_page(pagination.page + 1)}}">Next &raquo;</a>
-    {% endif %}
+    <ul>
+        {%- for page in pagination.iter_pages() %}
+        {% if page %}
+        {% if page != pagination.page %}
+        <li><a href="{{ url_for_other_page(page) }}">{{ page }}</a></li>
+        {% else %}
+        <strong>{{ page }}</strong>
+        {% endif %}
+        {% else %}
+        …
+        {% endif %}
+        {%- endfor %}
+        {% if pagination.has_next %}
+        <li><a href="{{ url_for_other_page(pagination.page + 1)}}">Next &raquo;</a></li>
+        {% endif %}
+    </ul>
 </div>
 {% endmacro %}
 
 
-{% macro render_field(field) %}
-{{ field.label }}
-<dd>
-{{ field(**kwargs)|safe }}
+{% macro with_errors(field, extra_label=None) %}
+<fieldset>
 {% if field.errors %}
-{% for error in field.errors %}
-<li class="field-error">{{ error }}</li>
-{% endfor %}
+{% set css_class = 'form-error ' + kwargs.pop('class', '') %}
+{% autoescape false %}
+{{ field.label }} {{ extra_label or '' }} 
+{% endautoescape %}
+{{ field(class=css_class, **kwargs) }}
+<ul class="form-errors">
+    {% for error in field.errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+{% autoescape false %}
+{{ field.label }} {{ extra_label or '' }} 
+{% endautoescape %}
+{{ field(**kwargs) }}
 {% endif %}
-</dd>
+</fieldset>
 {% endmacro %}
+

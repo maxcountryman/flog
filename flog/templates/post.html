@@ -1,10 +1,13 @@
 {% from 'macros.html' import render_post %}
 
 {% extends "layout.html" %}
-{% block title %} | {{ post.title }}{% endblock %}
+{% block title %}{{ post.title }} | {% endblock %}
+{% block description %}{{ post.body|truncate|safe|striptags }}{% endblock %}
 
 {% block body %}
-
-{{ render_post(post, tags) }}
-
+<div class="grid">
+    <div class="span16">
+        {{ render_post(post, tags) }}
+    </div>
+</div>
 {% endblock %}

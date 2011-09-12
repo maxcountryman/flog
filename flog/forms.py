@@ -1,62 +1,44 @@
 from flog.utilities import is_hashed
 
-from flaskext.bcrypt import check_password_hash
+from wtforms import (Form, TextField, TextAreaField, PasswordField, 
+        validators)
 
-from wtforms import Form, TextField, TextAreaField, PasswordField, validators
-
-
-class RegistrationForm(Form):
-    username = TextField('Username', [validators.Length(min=4, max=25)])
-    
-    email = TextField(
-        'Email Address', 
-        [validators.Length(min=6, max=254), validators.Email()]
-        )
-    
-    password = PasswordField('Password', [
-        validators.Required(),
-        validators.EqualTo('confirm', message='Passwords must match'),
-        validators.Length(min=8, max=128),
-        ])
-    
-    confirm = PasswordField('Confirm Password')
+optional = [validators.Optional()]
+required = [validators.Required()]
+username_validators = [validators.Length(min=6, max=28)]
+email_validators = [validators.Length(min=6, max=35), validators.Email()]
+pass_validators = [
+                validators.Required(),
+                validators.EqualTo('pass_two', message='Passwords must match.'),
+                validators.Length(min=6, max=35),
+                ]
+title_validators = [validators.Required(), validators.Length(max=140)]
 
 
-class LoginForm(Form):
-    username = TextField('Username', [validators.Required()])
-    password = PasswordField('Password', [validators.Required()])
+class Registration(Form):
+    username = TextField(u'Username', validators=username_validators)
+    email = TextField(u'Email Address', email_validators)
+    pass_one = PasswordField(u'Password', pass_validators)
+    pass_two = PasswordField(u'Confirm Password', required)
 
 
-class EditUserForm(Form):
-    email = TextField(
-        'Email Address', 
-        [validators.Length(min=6, max=254), validators.Email()]
-        )
-    current = PasswordField(
-        'Current Password', 
-        [validators.Required(), is_hashed]
-        )
-    newpass = PasswordField(
-        'New Password', [
-            validators.Required(),
-            validators.Length(min=8, max=128),
-            validators.EqualTo('confirm', message='Passwords must match'),
-            ]
-        )
-    confirm = PasswordField(
-        u'Confirm Password', 
-        [validators.Required(), validators.Length(min=8, max=128)]
-        )
+class Login(Form):
+    username = TextField(u'Username', required)
+    password = PasswordField(u'Password', required)
 
 
-class AddPostForm(Form):
-    title = TextField(
-            u'Title', 
-            [validators.Required(), validators.Length(max=50)]
-            )
-    body = TextAreaField(u'Body', [validators.Required()])
-    tags = TextField(u'Tags', [validators.Required()])
+class EditUser(Form):
+    email = TextField(u'Email Address', email_validators)
+    old_pass = PasswordField(u'Current Password', [validators.Required(), is_hashed])
+    pass_one = PasswordField(u'New Password', pass_validators)
+    pass_two = PasswordField(u'Confirm Password', required)
 
 
-class EditPostForm(AddPostForm):
+class AddPost(Form):
+    title = TextField(u'Title', title_validators)
+    body = TextAreaField(u'Body', required)
+    tags = TextField(u'Tags', optional)
+
+
+class EditPost(AddPost):
     pass

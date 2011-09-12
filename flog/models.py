@@ -108,7 +108,6 @@ class Tag(db.Model):
             tag = cls(tag_name)
             db.session.add(tag)
             db.session.commit()
-            return tag
         return tag
     
     def __repr__(self):

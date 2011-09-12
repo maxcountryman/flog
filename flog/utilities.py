@@ -1,6 +1,7 @@
 from flog import app
 
-from flask import session, g, flash, request, url_for
+from flask import (session, g, flash, request, url_for, redirect, 
+        render_template, abort)
 from flaskext.bcrypt import check_password_hash
 
 from wtforms.validators import ValidationError
@@ -35,6 +36,19 @@ def deauth_user():
     session.pop('logged_in', None)
     session.pop('username', None)
     flash('You were logged out')
+
+def whitelist(f):
+    '''This decorator function is used to limit access to a view based on a 
+    whitelist of IPs which may be configured in the apps config by setting 
+    `SITE_WHITELIST` to a list of allowed IPs.
+    '''
+    
+    @wraps(f)
+    def inner(*args, **kwargs):
+        if not request.remote_addr in app.config.get('SITE_WHITELIST', []):
+            return abort(403)
+        return f(*args, **kwargs)
+    return inner
 
 def login_required(f):
     '''This functuon checks whether we have `logged_in` set to `True`. If not 

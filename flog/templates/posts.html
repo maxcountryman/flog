@@ -1,14 +1,19 @@
-{% from 'macros.html' import render_pagination, render_post %}
+{% from 'macros.html' import render_pagination, render_post_list %}
 
 {% extends "layout.html" %}
-{% block title %} | Posts{% endblock %}
+{% block title %}Recent Posts | {% endblock %}
+{% block description %}The latest posts on {{ config.SITE_NAME }} organized by date, most recent to oldest.{% endblock %}
+{% block extra_head %}
+<link href="{{ url_for('recent_feed') }}" rel="alternate" title="Recent Posts" type="application/atom+xml" />
+{% endblock %}
 
 {% block body %}
-
-{% for post in pagination.items %}
-{{ render_post(post) }}
-{% endfor %}
-
-{{ render_pagination(pagination) }}
-
+<div class="grid">
+    <div class="span16">
+        {% for post in pagination.items %}
+        {{ render_post_list(post, tags) }}
+        {% endfor %}
+        {{ render_pagination(pagination) }}
+    </div>
+</div>
 {% endblock %}
