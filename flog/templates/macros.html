@@ -1,7 +1,7 @@
 {% macro render_post(post, tags=None) %}
 <article class="post">
     <h1>
-        <a href="{{ url_for('show_post', slug=post.slug) }}">{{ post.title }}</a>
+        <a href="{{ url_for('show_post', slug=post.slug) }}">{{ post.title }}</a> 
     </h1>
     <div class="meta">
         <span class="author" title="Posted by {{post.author}}">
@@ -29,7 +29,7 @@
 
 
 {% macro render_post_list(post, tags) %}
-<div class="post">
+<article class="post">
     <h1>
         <a href="{{ url_for('show_post', slug=post.slug) }}">{{ post.title }}</a>
     </h1>
@@ -41,7 +41,7 @@
     <div class="body">
         {{ post.body|truncate|safe|striptags }}
     </div>
-</div>
+</article>
 {% endmacro %}
 
 

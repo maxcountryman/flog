@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         {% block extra_head %}{% endblock %}
     </head>
-    
+
     {% block header %}
     <!--Navigation bar, header-->
     <nav>
@@ -26,43 +26,44 @@
     </div>
     </nav>
     {% endblock %}
-    
+
     <!--Primary page content-->
     {% block content %}
     <div class="wrapper">
         <section>
         <div class="grid">
             <div class="span16">
-            {% for message in get_flashed_messages() %}
-            <div class="flash">
-                {{ message }}
-            </div> 
-            {% endfor %}
-            {% if error %}
-            <div class="error">
-                <strong>Error:</strong> {{ error }}
-            </div>
-            {% endif %}
+                {% for message in get_flashed_messages() %}
+                <div class="flash">
+                    {{ message }}
+                </div> 
+                {% endfor %}
+                {% if error %}
+                <div class="error">
+                    <strong>Error:</strong> {{ error }}
+                </div>
+                {% endif %}
             </div>
         </div>
         {% block body %}{% endblock %}
         </section>
     </div>
     {% endblock %}
-    
+
     {% block other %}{% endblock %}
-    
+
     <!--Footer page content-->
     {% block footer %}
     <footer>
     <div class="grid">
         <div class="span16">
             <small><p>&#169; Copyright {{ config.SITE_AUTHOR }}</p></small>
+            <small><span "float:right">Built with <a href="https://github.com/maxcountryman/flog">Flog</a></span></small>
         </div>
     </div>
     </footer>
     {% endblock %}
-    
+
     <!--JavaScript goes here-->
     <script>
         $(".flash").ready(function () {

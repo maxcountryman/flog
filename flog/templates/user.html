@@ -7,23 +7,23 @@
 {% elif session.logged_in and session['username'] == user.username %}
 
 <div class="grid">
-    <div class="span5">
-        <h2>Account Settings</h2>
-        <p><small>Your current password is required to make changes</small></p>
-    </div>
-    <div class="span6">
-        {% from "macros.html" import with_errors %}
-        <form method="post" action="">
-            <div class="form_fields">
-                {{ with_errors(form.email, class='form_field') }}
-                {{ with_errors(form.old_pass, class='form_field') }}
-                {{ with_errors(form.pass_one, class='form_field') }}
-                {{ with_errors(form.pass_two, class='form_field') }}
-            </div>
-            <input class="button" type="submit" value="Update">        
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-        </form>
-        <span style="float:right"><small><a class="delete-user" href="{{ url_for('user', id=session.username, action='delete') }}">Delete Account</a></small></span>
+    <div class="span16">
+        <div class="form-style">
+            <h2>Account Settings</h2>
+            <p><small>Your current password is required to make changes</small></p>
+            {% from "macros.html" import with_errors %}
+            <form method="post" action="">
+                {{ with_errors(form.email, class='text-input') }}
+                {{ with_errors(form.old_pass, class='text-input') }}
+                {{ with_errors(form.pass_one, class='text-input') }}
+                {{ with_errors(form.pass_two, class='text-input') }}
+                <input class="button" type="submit" value="Update">        
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            </form>
+            <form method="delete" action="">
+                <span style="float:right"><small><a class="delete-user" href="{{ url_for('user', id=session.username) }}">Delete Account</a></small></span>
+            </form>
+        </div>
     </div>
 </div>
 {% endif %}

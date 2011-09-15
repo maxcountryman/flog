@@ -2,7 +2,7 @@
 
 {% extends "layout.html" %}
 {% block title %}{{ post.title }} | {% endblock %}
-{% block description %}{{ post.body|truncate|safe|striptags }}{% endblock %}
+{% block description %}{{ post.body|truncate|striptags }}{% endblock %}
 
 {% block body %}
 <div class="grid">

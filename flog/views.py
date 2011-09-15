@@ -103,7 +103,7 @@ def user():
 def delete_user():
     user = request.args['id']
     user = User.query.filter_by(username=user).first_or_404()
-    if request.method == 'DELETE' or request.args.get('action') == 'delete':
+    if request.method == 'DELETE':
         if user.username != session['username'] or not user.is_staff:
             return abort(500)
         user = user.is_active = False
